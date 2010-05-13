@@ -1,0 +1,52 @@
+<project name="pdBimpy" default="jar" basedir=".">
+
+	<!--globals-->
+	<property name="src" value="./src" />
+	<property name="build" value="./build" />
+	<property name="doc" value="./doc" />
+	<property name="lib" value="./lib" />
+	<property name="dist" value="./dist" />
+	<property name="version" value="0.1" />
+	
+	<path id="build.classpath">
+		<fileset dir="${lib}" includes="**/*.jar" />
+	</path>
+
+	<!--create build directory-->
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${doc}" />
+	</target>
+
+	<!--compile all source files-->
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" debug="off" optimize="on">
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+	<!--compile all souce files with debugging support-->
+	<target name="debug" depends="init">
+		<javac srcdir="${src}" destdir="${build}" debug="on" optimize="off">
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+	<!--clean up compiled class files-->
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${doc}" />
+		<delete dir="${dist}" />
+		<delete file="./${ant.project.name}-*.jar" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="./${ant.project.name}-${version}.jar" basedir="${build}" />
+	</target>
+
+	<target name="doc" depends="init">
+		<javadoc sourcepath="${src}" destdir="${doc}" packagenames="org.penguindreams.*" />
+	</target>
+
+</project>
